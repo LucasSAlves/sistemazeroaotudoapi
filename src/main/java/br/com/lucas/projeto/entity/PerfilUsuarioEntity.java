@@ -2,9 +2,7 @@ package br.com.lucas.projeto.entity;
 
 import org.springframework.beans.BeanUtils;
 
-import br.com.lucas.projeto.dto.PerfilDTO;
 import br.com.lucas.projeto.dto.PerfilUsuarioDTO;
-import br.com.lucas.projeto.dto.UsuarioDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

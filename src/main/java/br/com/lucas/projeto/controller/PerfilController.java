@@ -3,6 +3,8 @@ package br.com.lucas.projeto.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,8 +44,18 @@ public class PerfilController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Long id) {
-        perfilService.excluir(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> excluir(@PathVariable Long id) {
+        try {
+            perfilService.excluir(id);
+            return ResponseEntity.noContent().build(); // 204 - sucesso sem conteúdo
+        } catch (DataIntegrityViolationException ex) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT) // 409 - conflito
+                    .body("Não é possível excluir o perfil. Ele está vinculado a um ou mais usuários.");
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro interno ao tentar excluir o perfil.");
+        }
     }
 }
